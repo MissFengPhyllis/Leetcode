@@ -1,0 +1,16 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] sum = new int[2];
+        //双层循环对数组中的每个元素进行不重复求和
+        for(int i = 0 ; i < nums.length;i++){
+            for(int j = i+1; j<nums.length; j++){
+                // 判断元素和是否与目标值相等且不能是重复的值相加
+                if(nums[i]+nums[j] == target && i!=j){
+                    sum[0] = i;
+                    sum[1] = j;
+                }
+            }
+        }
+        return sum;
+    }
+}
