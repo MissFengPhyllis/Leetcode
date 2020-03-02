@@ -1,0 +1,33 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        /*解法二，用hashmap来解答*/
+         int[] result = new int[2];
+        if(nums ==null|| nums.length<2){
+            return new int[]{-1, -1};
+        }
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i = 0; i< nums.length; i++){
+            //将数组的值作为map的key, 下标作为map的value
+          //map.put(nums[i],i);//如果在这里赋值的话，会出现小问题
+          
+            //如果map中的索引值等于target减去数组中的一个值，也就是说，数组中一定存在
+            //两个值相加等于target
+            //由于第一次判断的时候，map中只有一个值，所有if语句暂时还不能执行
+            //等到i=1,也就是第二次循环的时候，map中有两个值了，此时map.containKey判断出来的是
+            //前面执行过的值
+            if(map.containsKey(target-nums[i])){ 
+                //那么现在排在前面的值是target-nums[i],也就是说，第一次是2的时候
+                //，map中只有一个键值对，当map中有7的时候，两个键值对，target-7就是2
+                //所以返回的第一个值就是target-num[i],第二个值才是这个i
+                 result[0] = map.get(target-nums[i]);
+                 result[1] = i;
+            }
+            //将数组中的元素变成这个map中的索引，将元素的下标变成value值
+            //注意，如果将这一行语句放在前面，则会导致如果出现[3,3] 6的情况下， 输出的就是[1,1]
+            //而不是[0,1],所以要一开始就对这个键值对进行判断，然后再赋值操作
+              map.put(nums[i],i);
+        }
+        return result;
+    }
+  
+    }
