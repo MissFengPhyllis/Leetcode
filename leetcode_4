@@ -1,0 +1,66 @@
+/* 题目
+4. 寻找两个有序数组的中位数
+给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。
+
+请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+
+你可以假设 nums1 和 nums2 不会同时为空。
+
+示例 1:
+
+nums1 = [1, 3]
+nums2 = [2]
+
+则中位数是 2.0
+示例 2:
+
+nums1 = [1, 2]
+nums2 = [3, 4]
+
+则中位数是 (2 + 3)/2 = 2.5
+*/
+
+/*解法
+这个题可以用归并排序的方式来做，由于两个数组是有序的数组，所以这里就省略了将数组排序这一步，两个数组，
+都从最前面的数开始比较，如果第一个数组的值比第二个数组的值小，则直接放入新的那个排好序的数组中，
+否则把第二个数组的值放进去。反正就是每次就放最小的那个就行，然后找到数组的中位数就行了
+*/
+
+class Solution {
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+       int len1 = nums1.length, len2 = nums2.length;
+        int len3 = len1 + len2;
+        int[] temp = new int[len3];//新建一个数组用于存储新的排好序的数组
+        int i =0,j = 0,q = 0; //i,j分别是两个数组的当前循环到的指针，q是新的这个数组的，每次比较完就给指针加一
+        while(i<len1 && j < len2 ){
+            if(nums1[i]<nums2[j]){
+                temp[q] = nums1[i];
+                i++;
+                q++;
+            }else{
+                temp[q] = nums2[j];
+                j++;
+                q++;
+            }
+        }
+        while(i<=len1-1){  //如果只有第一个数组还有值的话，那么新数组后面的值直接复制数组一的值就行
+            temp[q++] = nums1[i++];
+        }
+        while(j<=len2-1){//否则直接复制数组二的值就行
+            temp[q++] = nums2[j++];
+        }
+        // for(int k = 0; k< len3; k++){
+        //     System.out.print(temp[k]+" ");
+        // }
+        // System.out.println("");
+        double middle = 0.0;
+        if(len3 % 2 ==0){  //最后找到新数组的中位数就行了
+//            System.out.println(temp[(len3/2) -1]);
+//            System.out.println(temp[len3/2]);
+            middle = (temp[(len3/2) -1] + temp[len3/2])/2.0; //这里需要说一下，如果是除以2的话，得到的是一个int的数，所以为了得到精确的小数，要除以2.0
+        }else{
+            middle = temp[len3/2]; //如果这个新的数组的长度是奇数，那中间的那个值就是了
+        }
+       return middle;
+    }
+}
