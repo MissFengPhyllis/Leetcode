@@ -6,17 +6,28 @@ public class demo {
     }
 
     //动态规划的办法//还没写完
-    public static String longestPalindrome2(String s) {
+    public String longestPalindrome(String s) {
+        //动态规划的办法
         //如果当前的字符串是空串，直接返回
         if(s.equals("") || s.length()==1) return s;
         int len = s.length(), left = 0, right = 0,count = 0;
         boolean[][] table = new boolean[len][len];
         for(int j = 0; j<len; j++){
             for(int i = 0; i<=j; i++){
-                //做判断，如果当前这ij位置的值是相同且位置差为1或者0，也就是说，这样的 a   aa 两种情况。那么tableij也是有返回值的
-                //否则的话，就需要进一步检测了，如果这个字符串是回文，则需要检测一下他们的子串i+1，j-1是不是回文，
-                table[i][j] = ((s.charAt(i)==s.charAt(j)) && ((j-i)==1) || table[i+1][j-1] ); //这里有错
+                /*做判断，如果当前这ij位置的值是相同且位置差为1或者0，也就是说，这样的 a   aa  两种情况。
+                那么tableij也是有返回值的,否则的话，
+                就需要进一步检测了，如果这个字符串是回文，则需要检测一下他们的子串i+1，j-1是不是回文
+                字符串的长度，我们首先假如字符串长度为 1,2,3
+                为 1 的时候是必然回文
+                为 2 的时候如果 也s.charAt(i) == s.charAt(j)必然回文
+                为 3 的时候如果 也s.charAt(i) == s.charAt(j)必然回文
+                那么在 字符串长度为 3 以上的时候我们向两边扩展那么就有了 table[i][j] = table[i + 1][j - 1]而
+                table [i + 1][j - 1]是我们已经记录过的所以就能直接判断了
+                ，*/
+              table[i][j] = ((s.charAt(i)==s.charAt(j)) &&((j-i<3) || table[i+1][j-1])   );//
+
                 //如果这两个位置的值是一样的，并且当前的这个子串的长度比之前的子串的长度还要长，就需要重新赋值给当前最长的子串
+              
                 if(table[i][j] && j-i > right -left){
                     right = j;
                     left = i;
@@ -25,7 +36,7 @@ public class demo {
                 }
             }
         }
-    //最后返回最长的字符串
+        //最后返回最长的字符串
         if(count>0){
             return s.substring(left,right+1);
         }
@@ -33,7 +44,6 @@ public class demo {
             //如果这个count的值是为0也就是说没有回文字符串。那就直接返回第一个字符
             return s.substring(0,1);
         }
-
     }
 
 //    暴力法，不可取，检测通不过
