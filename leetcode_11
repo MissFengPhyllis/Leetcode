@@ -1,0 +1,58 @@
+/*题目描述
+给你 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+说明：你不能倾斜容器，且 n 的值至少为 2。
+示例：
+
+输入：[1,8,6,2,5,4,8,3,7]
+输出：49
+
+*/
+class Solution {
+  
+    public int maxArea(int[] height) {
+        //暴力法
+        // int maxCapacity=0,temp = 0;
+        // int length = 0,width = 0;
+        // int len = height.length;
+        // for(int i=0; i<len;i++){
+        //     for(int j = i+1; j< len; j++ ){
+        //         width = j-i;
+          
+        //         if(height[i]>height[j]){
+        //             length = height[j];
+                    
+        //         }else{
+        //             length = height[i];
+        //         }
+        //         temp = length*width;
+        //         //将最大的那个值保存下来
+        //         if(temp>maxCapacity){
+        //             maxCapacity = temp;
+        //         }
+        //     }
+        // }
+        // return maxCapacity;
+
+        //双指针法
+        /*两线段之间形成的区域总是会受到其中较短那条长度的限制。我们使用两个指针，
+        一个放在开始，一个置于末尾。 在每一步中，我们会计算指针所指向的两条线段形成的区域面积，
+        并将指向较短线段的指针向较长线段那端移动一步*/
+        int len = height.length;
+        int left = 0, right = len-1;
+        int area = (right - left) * Math.min(height[left],height[right]);
+        while(left<right){
+            //用math函数来筛选出最大的值 = 下标乘以两个数字之间最小的那个数字
+            area = Math.max(area,(right - left) * Math.min(height[left],height[right]));
+            //指针移动，如果当前的这个靠近左边的值是比右边的值小的话，由左向中间移动
+            //如果右边的值比左边的值小，则右边的向中间移动，这样等到了最后两个左右指针重合的时候，循环结束
+            if(height[left]<height[right]){
+                left ++;
+            }else{
+                right--;
+            }
+           
+        }
+         return area;
+    }
+}
