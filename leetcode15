@@ -1,0 +1,102 @@
+/*题目
+15. 三数之和
+给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+
+注意：答案中不可以包含重复的三元组。
+
+示例：
+给定数组 nums = [-1, 0, 1, 2, -1, -4]，
+
+满足要求的三元组集合为：
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+执行结果：
+通过
+显示详情
+执行用时 :906 ms, 在所有 Java 提交中击败了5.01%的用户
+内存消耗 :46.2 MB, 在所有 Java 提交中击败了91.55%的用户。
+
+*/
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+    //利用hashmap的方法，还有一些小bug，目前没有发现在哪里
+        // HashMap<Integer,Integer> map = new HashMap<>(); 
+        // List<List<Integer>> list = new  ArrayList<>();
+        // for(int i = 0; i< nums.length; i++){
+        //     if(map.containsKey(nums[i])){
+        //         map.put(nums[i],i+1);
+        //     }else{
+        //         map.put(nums[i],0);
+        //     }
+        // }
+        
+        //  int[] arrs =  Arrays.stream(nums).sorted().distinct().toArray();
+        //     if(map.get(0)!=null && map.get(0)>=3){
+        //         list.add(Arrays.asList(0,0,0));
+        //     }
+        //     for(int j = 0; j< arrs.length; j++){
+        //         for(int k = j+1; k<arrs.length; k++){
+  
+        //             if((arrs[j]*2+arrs[k]==0 && map.get(arrs[j])>=2)){
+        //             list.add(Arrays.asList(arrs[j],arrs[j],arrs[k]));
+        //             }
+        //             if((arrs[k]*2+arrs[j]==0 && map.get(arrs[k])>=2)){
+        //                 list.add(Arrays.asList(arrs[j],arrs[k],arrs[k]));
+        //             }
+        //             int c = -(arrs[j] + arrs[k]);
+        //             if(c>arrs[k] && map.get(c)!=null){
+        //                list.add(Arrays.asList(c,arrs[k],arrs[j])); 
+        //             }
+        //         }
+        //     }
+        // return list;
+
+
+//利用双指针的办法
+//如果当前的数组为空或者长度小于2，则直接输出空集合
+        if(nums == null || nums.length <=2){
+            return Collections.emptyList();
+        }
+        //新建一个集合用来存最后满足条件的list
+        Set<List<Integer>> result = new LinkedHashSet<>();
+        //先将数组排个序，从小到大
+        Arrays.sort(nums);
+        //这里i只需要走到length-2的哪一步，也就是最极端的情况下，head在倒数第二位，然后就是tail了
+        for(int i = 0; i<nums.length - 2; i++){
+            //将当前的下标的下一个值赋值给头指针
+            int head = i+1;
+            //尾指针最开始就是最后一个值
+            int tail = nums.length -1;
+            //进行循环，也就是要一直满足头指针在尾指针的前面
+           while(head<tail){
+               
+               int sum = -(nums[head] + nums[tail]);
+               //如果当前的这个值与头尾指针的和的相反数相等，则这三个数就满足条件
+               if(sum == nums[i]){
+                //Arrays.asList() 将数组转化为list。每次将满足条件的值放入到list中，然后加入到前面那个set集合中
+                   List<Integer> list = Arrays.asList(nums[i],nums[head],nums[tail]);
+                   result.add(list);
+               }
+               /*由于这个数组是排过序的，所以，如果当前这个值是小于头尾指针两个值和的相反数的话，那也就是说
+               头指针的这个值还太小了，达不到两边的值和相反数大于当前这个值的，需要继续往后走，那就是头指针
+               加一了。
+               */
+               if(sum >= nums[i]){
+                   head++;
+               }
+               else{
+                   /*否则就是说，当前这个值太大了，需要将尾指针向中间（左边）移动，将值减小一点，才能更好的
+                   去满足两个指针的值和的相反数等于当前这个值
+                   */
+                   tail--;
+               }
+           }
+        }
+        //最后，由于输出的是一个arraylist集合的集合，所以需要创建这么一个集合，将之前的的到满足条件的集合放进去
+        return new ArrayList<>(result);
+    }
+}
