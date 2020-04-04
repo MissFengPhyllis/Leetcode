@@ -1,0 +1,50 @@
+/*
+42. 接雨水
+给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+
+示例:
+
+输入: [0,1,0,2,1,0,1,3,2,1,2,1]
+输出: 6
+
+*/
+
+class Solution {
+    public int trap(int[] height) {
+      
+        if(height.length == 0)return 0;
+
+        int len = height.length;
+        int left = 0;
+        int right = len-1;
+        int maxLeft = height[left];
+        int maxRight = height[right];
+        int res = 0;
+        while(left < right){
+            //这里的判断只是为了移动指针，并不是真的必须要在左边的值小于右边的值的时候才移动。
+            if(height[left] < height[right]){
+                left++;
+                //将当前的那个最大值与现在的值进行比较取得最大值
+                maxLeft = Math.max(maxLeft,height[left]);
+                //这里由于一进来的时候就指针右移了，所有当前的height[left]是最开始的那个位置的右边一位
+                if(maxLeft > height[left]){
+                    //无论当前这个值的下一位是比max大还是小，这里都是对的
+                    //如果下一个值比max还要大，那么之前接到的水量是多少就是多少
+                    //如果下一个值没有max大，甚至比他的前一个值还要小，那么接到的水量就是比之前还要多
+                    //直到遇到那个最新的max值
+                    res+= maxLeft-height[left];
+                }
+            }else{
+                right--;
+                //将当前的那个最大值与现在的值进行比较取得最大值
+                maxRight = Math.max(maxRight,height[right]);
+                //这里由于一进来的时候就指针左移了，所有当前的height[right]是最开始的那个位置的左边一位
+                if(maxRight>height[right]){
+                    res += maxRight-height[right];
+                }
+            }
+
+        }
+        return res;
+    }
+}
