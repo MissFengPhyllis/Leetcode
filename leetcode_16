@@ -1,0 +1,39 @@
+/*
+16. 最接近的三数之和
+给定一个包括 n 个整数的数组 nums 和 一个目标值 target。找出 nums 中的三个整数，使得它们的和与 target 最接近。返回这三个数的和。假定每组输入只存在唯一答案。
+
+例如，给定数组 nums = [-1，2，1，-4], 和 target = 1.
+
+与 target 最接近的三个数的和为 2. (-1 + 2 + 1 = 2).
+*/
+class Solution {
+    public int threeSumClosest(int[] nums, int target) {
+        //给返回值赋一个初始值
+        int res = nums[0] + nums[1] + nums[2];
+        int sum = 0;
+        //必须先对这个数组排序
+         Arrays.sort(nums);
+         //循环只需要到length-2就够了
+         for(int i = 0; i < nums.length-2; i++){
+             //双指针，左右指针
+             int left = i+1, right = nums.length-1;
+            while(left< right){//一个简单的循环条件
+                sum = nums[left] + nums[i] + nums[right];
+                //如果当前的和与target的距离比之前赋值的还要小，说明那才是我们想要的答案
+                if(Math.abs(sum-target) < Math.abs(res-target)){
+                    res = sum;//所以将最新的值赋值过来
+                }//这里需要给指针移动的机会，条件不是特别重要
+                if(sum< target){
+                   left++; 
+                }else if(sum > target){
+                    right--;
+                }else{
+                    //如果现在的和直接等于了target，那就直接返回啊
+                    return res;
+                }
+            }
+           
+         }
+    return  res;
+    }
+}
