@@ -1,0 +1,67 @@
+/*
+102. 二叉树的层序遍历
+给你一个二叉树，请你返回其按 层序遍历 得到的节点值。 （即逐层地，从左到右访问所有节点）。
+
+ 
+
+示例：
+二叉树：[3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+返回其层次遍历结果：
+
+[
+  [3],
+  [9,20],
+  [15,7]
+]
+
+思路，首先要去创建一个满足条件的列表，类型为List<List<Interger>>的，就是一个列表的值还是列表，这个列表是全局访问的
+然后是需要创建一个函数，这个函数能够帮我们去判断并且添加节点值到这个值为列表的列表，
+在添加前先去判断一下，由于初始化的列表是没有大小的，所以在后续添加列表的时候，需要先给它开辟一个新的列表空间，然后再根据当前的节点情况，把值赋值到列表中去
+最后判断左右节点，并且调用递归函数，将左右节点的值加入到列表中去，最后在主要函数里面判断一下传入的节点，如果这个节点本身为空，直接返回空列表
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    List<List<Integer>> levels = new ArrayList<List<Integer>>();
+
+    //传入当前访问的节点和它所在的层
+    public void add(TreeNode node, Integer level){
+        //如果这个列表的大小等于当前的层数，就给他创建一个列表空间出来，说白了就是第一次初始化的时候，给新建空列表
+         if (levels.size() == level){
+            //如果节点为空，直接添加一个空的列表值
+            levels.add(new ArrayList<Integer>());
+        }
+        //获取当前这个位置的节点的值，将其添加到List里面去
+        levels.get(level).add(node.val);
+
+        //最后递归调用，判断该节点的左右节点是否为空，这里需要注意一下左右节点的位置，先输出左节点，再右节点
+        if(node.left != null){
+           add(node.left, level+1);
+       }
+        if(node.right !=null){
+            add(node.right, level+1);
+        }
+      
+        
+    }
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) return levels;
+        //最后初始化这个函数，返回这个列表数组
+        add(root, 0);
+        return levels;
+    }
+}
