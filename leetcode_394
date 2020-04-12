@@ -1,0 +1,54 @@
+/*
+394. 字符串解码
+给定一个经过编码的字符串，返回它解码后的字符串。
+
+编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+
+你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+
+此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+
+示例:
+
+s = "3[a]2[bc]", 返回 "aaabcbc".
+s = "3[a2[c]]", 返回 "accaccacc".
+s = "2[abc]3[cd]ef", 返回 "abcabccdcdcdef".
+
+解法：用栈的思想
+*/
+
+class Solution {
+    public String decodeString(String s) {
+        //这里是为方面后面的字符串好往后加，或者定义为String ,后面就直接写 s+= c+“”也行
+         StringBuilder res = new StringBuilder();
+        int num = 0;
+        //这里定义为LinkedList,是因为这个list是有序的list
+        LinkedList<Integer> stack_num = new LinkedList<>();
+        LinkedList<String> stack_char= new LinkedList<>();
+
+        for(int i = 0; i<s.length(); i++){
+            Character c = s.charAt(i);
+            if(c == '['){
+                stack_num.addLast(num);
+                //每次加完后就需要把这个数组个清零了
+                num = 0;
+                stack_char.addLast(res.toString());
+                res = new StringBuilder();//一样，加完清零
+            }else if(c == ']'){
+                StringBuilder temp = new StringBuilder();
+                int currnum = stack_num.removeLast();//返回的是最后的那个值
+                //这里对应的是，如果【前面是数字，那么就需要重复的加几次【】中间的字符，所以写成了循环
+                for(int j = 0; j<currnum; j++){
+                    temp.append(res);//这是当前叠加字符串后最后得到的hum*【】的那个
+                }
+                res = new StringBuilder(stack_char.removeLast() + temp);//返回的是数组里面最后加进去的那个字符加上当前这个字符
+            }else if(c>='0' && c<='9'){
+                num = num*10+Integer.parseInt(c+"");//将数字字符转化为数字
+            }else{
+                res.append(c);//如果当前的是字符字符，那就直接加到后面去
+            }
+            
+        }
+        return res.toString();
+    }
+}
