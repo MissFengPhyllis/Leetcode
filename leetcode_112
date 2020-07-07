@@ -1,0 +1,50 @@
+/*
+给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
+
+说明: 叶子节点是指没有子节点的节点。
+
+示例: 
+给定如下二叉树，以及目标和 sum = 22，
+
+              5
+             / \
+            4   8
+           /   / \
+          11  13  4
+         /  \      \
+        7    2      1
+返回 true, 因为存在目标和为 22 的根节点到叶子节点的路径 5->4->11->2。
+*/
+
+/*
+解题思路：
+虽然这个题不难，但是要用到递归的思路，我的递归思路还是不行，简单一点就是说，因为这个总和是固定的，所以我们只需要判断，一条支路上有一组满足的数据就行
+所以就用总和来不断的减去当前访问过的值，因为如果是从正面去加的话，很有可能还没有遍历完一整个支路，值就满足甚至是超越了，所以正向方法行不通
+所以传递值的时候，将sum的值变成sum减去当前root的值，然后当前的root先去遍历左节点，如果左节点遍历完了还是没有合适的值，那就再去遍历右节点，最后判断剩下的
+的那个节点值与当前总和剩下的值是不是一样的，是一样就返回true，否则返回false。
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean hasPathSum(TreeNode root, int sum) {
+       
+        if(root == null){
+            return false;
+        }else{
+
+            if(root.left == null && root.right == null){
+                return (sum == root.val);
+            }else{
+                return hasPathSum(root.left, sum-root.val) || hasPathSum(root.right, sum-root.val);
+            }
+        }
+    }
+}
